@@ -1,5 +1,8 @@
 # object-detection-yolov4
+
 A complete guide to object detection using YOLO V4  and OpenCV
+
+<img src="images/thumb.jpg"/></a>
 
 This collection of Google Colab-Notebooks demonstrates how to perform object detection using the YOLO V4 model.
 
