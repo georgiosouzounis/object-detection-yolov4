@@ -12,6 +12,8 @@ def object_detection_analysis_with_nms(test_img, class_labels, class_colors, obj
 	img_height = test_img.shape[0]
 	img_width = test_img.shape[1]
 
+	result = test_img.copy()
+
 	# declare lists for the arguments of interest: classID, bbox info, detection confidences
 	class_ids_list = []
 	boxes_list = []
@@ -84,10 +86,10 @@ def object_detection_analysis_with_nms(test_img, class_labels, class_colors, obj
 		print("predicted object {}".format(predicted_class_label))
 
 		# draw rectangle and text in the image
-		cv2.rectangle(test_img, (start_x_pt, start_y_pt), (end_x_pt, end_y_pt), box_color, 1)
-		cv2.putText(test_img, predicted_class_label, (start_x_pt, start_y_pt-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 1)
+		cv2.rectangle(result, (start_x_pt, start_y_pt), (end_x_pt, end_y_pt), box_color, 1)
+		cv2.putText(result, predicted_class_label, (start_x_pt, start_y_pt-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, box_color, 1)
 
-	return test_img, winner_box_list
+	return result, winner_box_list
 
 
 def object_detection_iou(iou_image, detection_box, gt_box):
@@ -96,12 +98,14 @@ def object_detection_iou(iou_image, detection_box, gt_box):
 	end_pt_x_box_a = detection_box[0] + detection_box[2]
 	end_pt_y_box_a = detection_box[1] + detection_box[3]
 	cv2.rectangle(iou_image, (start_pt_x_box_a, start_pt_y_box_a), (end_pt_x_box_a, end_pt_y_box_a), (0, 255, 0), 2)
+	cv2.putText(iou_image, "predicted bbox", (start_pt_x_box_a, start_pt_y_box_a-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
 
 	start_pt_x_box_b = gt_box[0]
 	start_pt_y_box_b = gt_box[1]
 	end_pt_x_box_b = gt_box[0] + gt_box[2]
 	end_pt_y_box_b = gt_box[1] + gt_box[3]
 	cv2.rectangle(iou_image, (start_pt_x_box_b, start_pt_y_box_b), (end_pt_x_box_b, end_pt_y_box_b), (0, 0, 255), 2)
+	cv2.putText(iou_image, "ground truth bbox", (start_pt_x_box_b, start_pt_y_box_b-5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
 
 	# determine the (x, y)-coordinates of the intersection rectangle
 	xA = max(start_pt_x_box_a, start_pt_x_box_b)
